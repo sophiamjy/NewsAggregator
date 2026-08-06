@@ -35,7 +35,7 @@ jobs:
         run: python main.py
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v4
 
       - name: Pages
         run: |
@@ -43,11 +43,11 @@ jobs:
           HTML=$(ls -t 新闻聚合输出/每日中东中亚新闻_*_翻译.html 2>/dev/null | head -1)
           if [ -n "$HTML" ]; then cp "$HTML" _site/index.html; fi
 
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
-      - uses: actions/deploy-pages@v5
+      - uses: actions/deploy-pages@v4
         id: deploy
 
       - name: Commit results
