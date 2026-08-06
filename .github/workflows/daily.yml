@@ -17,9 +17,6 @@ jobs:
   aggregate:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
 
     steps:
       - uses: actions/checkout@v4
@@ -37,14 +34,20 @@ jobs:
           EMAIL_CC: ${{ secrets.EMAIL_CC }}
         run: python main.py
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Pages
         run: |
           mkdir -p _site
           HTML=$(ls -t 新闻聚合输出/每日中东中亚新闻_*_翻译.html 2>/dev/null | head -1)
           if [ -n "$HTML" ]; then cp "$HTML" _site/index.html; fi
 
-      - uses: actions/upload-pages-artifact@v3
-      - uses: actions/deploy-pages@v4
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - uses: actions/deploy-pages@v5
         id: deploy
 
       - name: Commit results
