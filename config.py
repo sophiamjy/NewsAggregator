@@ -704,20 +704,49 @@ COUNTRY_RSS_DISAMBIGUATION = {
             "Jordan 3", "Jordan 4", "Jordan 5", "Jordan 6", "Jordan 11",
             "Jordan 12", "Jordan 13", "Jordan Retro", "Jumpman",
             "Space Jam",
-            # ── 美国体育 ──
-            "NBA", "NFL", "MLB", "NHL", "NCAA",
-            "basketball", "touchdown", "home run", "rebound",
-            "draft pick", "free agent", "trade deadline",
-            "training camp", "preseason", "playoffs",
+            # ── 知名 Jordan 人名 (全名匹配精度高) ──
+            "Michael B. Jordan", "Michael B Jordan", "Michael Jordan",
+            "Jordan Peele", "Jordan Peterson", "Jordan Belfort",
+            "Jordan Spieth", "Jordan Henderson", "Jordan Pickford",
+            "Jordan Ayew", "Jordan Larmour", "Jordan Mailata",
+            "Jordan Poole", "Jordan Clarkson", "Jordan Goodwin",
+            "Jordan Hawkins", "Jordan Mason", "Jordan Walker",
+            "Jordan Love", "Jordan Addison", "Jordan Walsh",
+            "Jordan Sanchez", "Jordan Villarreal", "Jordan Laural",
+            "Jordan Raanan", "Jordan Garretson",
+            "Jordan James", "Jordan Glasgow", "Jordan Ragland",
+            "Breze Jordan", "Blaze Jordan",
+            "DeAndre Jordan", "Deandre Jordan", "De Andre Jordan",
+            # ── 体育球队 ──
             "Chicago Bulls", "LA Lakers", "Celtics", "Warriors",
-            "Dodgers", "Yankees", "Cowboys", "Patriots",
+            "Dodgers", "Yankees", "Cowboys", "Patriots", "49ers",
+            "Cardinals", "Diamondbacks", "Rattlers",
+            # ── 体育术语 ──
+            "home run", "touchdown", "free agent", "training camp",
+            "draft pick", "playoffs", "preseason", "bench",
+            "rebound", "rookie", "starter", "trade deadline",
+            "NBA", "NFL", "MLB", "NHL", "NCAA",
+            "basketball", "baseball", "football",
+            # ── 美国体育媒体 ──
             "ESPN", "Bleacher Report", "Sports Illustrated",
+            "NBC Sports", "CBS Sports",
+            "FOX Sports", "Yahoo Sports", "The Athletic",
+            "On3", "hoops", "NBA.com",
+            "Hardwood Houdini", "fantasypros",
             # ── 美国地名 ──
             "Jordan Lake", "Jordan River Parkway",
             "West Jordan", "South Jordan",
             "Utah", "Salt Lake County",
             # ── 美国学校 ──
             "Jordan High", "Jordan Middle School",
+            # ── 美国娱乐媒体 ──
+            "Deadline", "Variety", "The Hollywood Reporter",
+            "TMZ", "People.com", "E! Online",
+            "BuzzFeed", "The Mirror", "Daily Mail",
+            "New York Post", "Page Six", "TheGrio",
+            # ── 美国地方新闻 (与 Jordan 人名重合) ──
+            "Denton Record-Chronicle", "Denton",
+            "City Council", "resignation",
         ],
     },
 
