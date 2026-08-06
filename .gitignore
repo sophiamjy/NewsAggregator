@@ -1,0 +1,8 @@
+api_keys.json
+__pycache__/
+*.pyc
+*.spec
+build/
+dist/
+profiles.json
+运行日志/

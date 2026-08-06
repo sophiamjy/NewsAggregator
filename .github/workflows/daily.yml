@@ -1,0 +1,58 @@
+name: Daily News
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+
+      - name: Install deps
+        run: pip install feedparser deep-translator markdown requests python-dateutil
+
+      - name: Run
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_AUTH: ${{ secrets.EMAIL_AUTH }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          EMAIL_CC: ${{ secrets.EMAIL_CC }}
+        run: python main.py
+
+      - name: Pages
+        run: |
+          mkdir -p _site
+          HTML=$(ls -t 新闻聚合输出/每日中东中亚新闻_*_翻译.html 2>/dev/null | head -1)
+          if [ -n "$HTML" ]; then cp "$HTML" _site/index.html; fi
+
+      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/deploy-pages@v4
+        id: deploy
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add 新闻聚合输出/ || true
+          if ! git diff --staged --quiet; then
+            git commit -m "自动: $(date +%Y-%m-%d)"
+            git push
+          fi
