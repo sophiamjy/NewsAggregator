@@ -512,9 +512,11 @@ COUNTRY_RSS_FEEDS = {
         "科技": [],
     },
     "也门": {
-        "综合": [],
-        "政治": [],
-        "经济": [],
+        "综合": [{"name": "Jordan Times Local", "url": "https://jordantimes.com/rss-feed/45", "enabled": True},
+        ],
+        "政治": [{"name": "Jordan Times Region", "url": "https://jordantimes.com/rss-feed/46", "enabled": True},
+        ],
+        "经济": [{"name": "Jordan Times Business", "url": "https://jordantimes.com/rss-feed/48", "enabled": True},],
         "科技": [],
     },
     "约旦": {
@@ -661,6 +663,64 @@ TIME_WINDOW_MODE = "up_to_now" #设置为抓取最新的
 #   country_signals  — 后处理: 命中任一即确认是该国新闻
 #   noise_signals    — 后处理: 当 country_signals=0 时, 命中任一即丢弃
 COUNTRY_RSS_DISAMBIGUATION = {
+    "约旦": {
+        # ── 宽泛查询负向排除词 ──
+        # "Jordan" 与英文人名/篮球鞋品牌/美国地名高度重合.
+        # Tier 1 已有领域关键词做主题过滤, 精简版仅覆盖最高信号噪音.
+        "broad_exclude": [
+            # 篮球鞋/运动品牌
+            "Air Jordan", "Jordan Brand", "Nike",
+        ],
+
+        # ── Tier 2 正向锁定关键词 ──
+        # 当某领域 Tier 1 结果 < RSS_DOMAIN_THRESHOLD 时启用.
+        "tier2_terms": [
+            "Amman",        # 首都
+            "Zarqa",        # 第二大城市
+            "Irbid",        # 第三大城市
+            "Aqaba",        # 唯一港口, 经济中心
+            "Petra",        # 世界遗产, 旅游名片
+        ],
+
+        # ── 后处理: 国家信号词 ──
+        "country_signals": [
+            "Amman", "Zarqa", "Irbid", "Aqaba", "Petra",
+            "Wadi Rum", "Dead Sea", "Jerash", "Madaba",
+            "Hashemite", "King Abdullah", "Abdullah II",
+            "Rania", "Queen Rania",
+            "Jordanian", "Jordan's",
+            "Jordan River Foundation",
+            "Royal Hashemite Court", "Jordan News Agency",
+            "Petra News Agency", "Al-Mamlaka",
+            "Aqaba Special Economic Zone",
+            "Jordan Phosphate Mines", "Arab Potash",
+            "Jordan Times", "Jordan News",
+        ],
+
+        # ── 后处理: 噪音信号词 ──
+        "noise_signals": [
+            # ── Air Jordan / 运动品牌 ──
+            "Air Jordan", "Jordan Brand", "Jordan 1", "Jordan 2",
+            "Jordan 3", "Jordan 4", "Jordan 5", "Jordan 6", "Jordan 11",
+            "Jordan 12", "Jordan 13", "Jordan Retro", "Jumpman",
+            "Space Jam",
+            # ── 美国体育 ──
+            "NBA", "NFL", "MLB", "NHL", "NCAA",
+            "basketball", "touchdown", "home run", "rebound",
+            "draft pick", "free agent", "trade deadline",
+            "training camp", "preseason", "playoffs",
+            "Chicago Bulls", "LA Lakers", "Celtics", "Warriors",
+            "Dodgers", "Yankees", "Cowboys", "Patriots",
+            "ESPN", "Bleacher Report", "Sports Illustrated",
+            # ── 美国地名 ──
+            "Jordan Lake", "Jordan River Parkway",
+            "West Jordan", "South Jordan",
+            "Utah", "Salt Lake County",
+            # ── 美国学校 ──
+            "Jordan High", "Jordan Middle School",
+        ],
+    },
+
     "格鲁吉亚": {
         # ── 宽泛查询负向排除词 ──
         # Tier 1 已有领域关键词做主题过滤, 美国体育/地方新闻不易混入.
@@ -759,7 +819,7 @@ COUNTRY_RSS_DISAMBIGUATION = {
             "Georgia Institute of Technology", "University of North Georgia",
             # 美国体育
             "Georgia TD", "NHRA", "Georgia Motorsports", "Georgia Southern",
-            "On3", "NCAA", "tennis", 
+            "On3", "NCAA", "tennis", "MLB", "NFL", "FIBA", "FIFA"
             # 美国媒体
             "boltsmag", "WJCL", ".gov", "WCTV", "AG INFORMATION", "ESPN", "Georgia Recorder",
             "Georgia Public Broadcasting", "E&E", "The Guardian", "AJC.com", "American Journal", "Georgia Ports",
