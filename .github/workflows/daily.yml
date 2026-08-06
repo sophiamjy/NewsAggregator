@@ -5,13 +5,8 @@ on:
     - cron: "0 2 * * *"
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
   aggregate:
@@ -34,21 +29,18 @@ jobs:
           EMAIL_CC: ${{ secrets.EMAIL_CC }}
         run: python main.py
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
       - name: Pages
         run: |
           mkdir -p _site
           HTML=$(ls -t 新闻聚合输出/每日中东中亚新闻_*_翻译.html 2>/dev/null | head -1)
           if [ -n "$HTML" ]; then cp "$HTML" _site/index.html; fi
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: _site
-
-      - uses: actions/deploy-pages@v4
-        id: deploy
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _site
+          force_orphan: true
 
       - name: Commit results
         run: |
