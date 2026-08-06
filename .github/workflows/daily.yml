@@ -35,12 +35,23 @@ jobs:
           HTML=$(ls -t 新闻聚合输出/每日中东中亚新闻_*_翻译.html 2>/dev/null | head -1)
           if [ -n "$HTML" ]; then cp "$HTML" _site/index.html; fi
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _site
-          force_orphan: true
+      - name: Deploy to Pages
+        run: |
+          HTML=$(ls -t 新闻聚合输出/每日中东中亚新闻_*_翻译.html 2>/dev/null | head -1)
+          if [ -z "$HTML" ]; then echo "无HTML文件, 跳过"; exit 0; fi
+          cp "$HTML" /tmp/index.html
+          git fetch origin gh-pages 2>/dev/null || true
+          if git rev-parse origin/gh-pages >/dev/null 2>&1; then
+            git checkout gh-pages 2>/dev/null || git checkout -b gh-pages origin/gh-pages
+          else
+            git checkout --orphan gh-pages
+            git rm -rf .
+          fi
+          cp /tmp/index.html index.html
+          git add index.html
+          git commit -m "Deploy $(date +%Y-%m-%d)" || true
+          git push origin gh-pages --force
+          git checkout main
 
       - name: Commit results
         run: |
