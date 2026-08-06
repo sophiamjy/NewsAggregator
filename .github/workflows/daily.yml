@@ -37,6 +37,8 @@ jobs:
 
       - name: Deploy to Pages
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           HTML=$(ls -t 新闻聚合输出/每日中东中亚新闻_*_翻译.html 2>/dev/null | head -1)
           if [ -z "$HTML" ]; then echo "无HTML文件, 跳过"; exit 0; fi
           cp "$HTML" /tmp/index.html
@@ -45,13 +47,13 @@ jobs:
             git checkout gh-pages 2>/dev/null || git checkout -b gh-pages origin/gh-pages
           else
             git checkout --orphan gh-pages
-            git rm -rf .
+            git rm -rf --quiet .
           fi
           cp /tmp/index.html index.html
           git add index.html
           git commit -m "Deploy $(date +%Y-%m-%d)" || true
           git push origin gh-pages --force
-          git checkout main
+          git checkout -f master
 
       - name: Commit results
         run: |
