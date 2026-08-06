@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   aggregate:
@@ -29,31 +31,21 @@ jobs:
           EMAIL_CC: ${{ secrets.EMAIL_CC }}
         run: python main.py
 
-      - name: Pages
+      - name: Prepare Pages artifact
         run: |
           mkdir -p _site
           HTML=$(ls -t 新闻聚合输出/每日中东中亚新闻_*_翻译.html 2>/dev/null | head -1)
           if [ -n "$HTML" ]; then cp "$HTML" _site/index.html; fi
+          ls -la _site/
 
-      - name: Deploy to Pages
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          HTML=$(ls -t 新闻聚合输出/每日中东中亚新闻_*_翻译.html 2>/dev/null | head -1)
-          if [ -z "$HTML" ]; then echo "无HTML文件, 跳过"; exit 0; fi
-          cp "$HTML" /tmp/index.html
-          git fetch origin gh-pages 2>/dev/null || true
-          if git rev-parse origin/gh-pages >/dev/null 2>&1; then
-            git checkout gh-pages 2>/dev/null || git checkout -b gh-pages origin/gh-pages
-          else
-            git checkout --orphan gh-pages
-            git rm -rf --quiet .
-          fi
-          cp /tmp/index.html index.html
-          git add index.html
-          git commit -m "Deploy $(date +%Y-%m-%d)" || true
-          git push origin gh-pages --force
-          git checkout -f master
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - uses: actions/deploy-pages@v4
+        id: deploy
 
       - name: Commit results
         run: |
