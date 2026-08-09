@@ -262,6 +262,12 @@ def generate_html(md_content, data=None):
         html_body = _md.markdown(md_content, extensions=['extra'])
     except ImportError:
         html_body = md_content.replace('\n', '<br>\n')
+    # 所有外部链接新窗口打开
+    html_body = re.sub(
+        r'<a href="(https?://[^"]+)"',
+        r'<a href="\1" target="_blank" rel="noopener noreferrer"',
+        html_body
+    )
     if data:
         html_body = _inject_nav(html_body, data)
     return f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">{_HTML_CSS}</head>
